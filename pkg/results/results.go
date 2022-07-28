@@ -1,43 +1,36 @@
 package results
 
-func NewResult(s *Success, e *Error) *Results[Success, Error] {
-	return &Results[Success, Error]{
-		Success:      s,
-		Failure:      e,
-		isSuccessful: true,
-	}
-}
-
-type Results[S Success, E Error] struct {
+// func
+type Results[S any, E any] struct {
 	Failure      *E
 	Success      *S
-	isSuccessful bool
+	IsSuccessful bool
 }
 
-func (r *Results[S, E]) Succeeded(success *S) *Results[S, E] {
+func (r *Results[SuccessIFace, ErrorIFace]) Succeeded(success *SuccessIFace) *Results[SuccessIFace, ErrorIFace] {
 	r.Success = success
-	r.isSuccessful = true
+	r.IsSuccessful = true
 	return r
 }
 
-func (r *Results[S, E]) Failed(failed *E) *Results[S, E] {
+func (r *Results[SuccessIFace, ErrorIFace]) Failed(failed *ErrorIFace) *Results[SuccessIFace, ErrorIFace] {
 	r.Failure = failed
-	r.isSuccessful = false
+	r.IsSuccessful = false
 	return r
 }
 
-func (r *Results[T, E]) IsSuccess() bool {
-	return r.isSuccessful
+func (r *Results[SuccessIFace, ErrorIFace]) IsSuccess() bool {
+	return r.IsSuccessful
 }
 
-func (r *Results[T, E]) IsFailure() bool {
-	return !r.isSuccessful
+func (r *Results[SuccessIFace, ErrorIFace]) IsFailure() bool {
+	return !r.IsSuccessful
 }
 
-func (r *Results[T, E]) Outcome() interface{} {
-	if r.isSuccessful {
-		return r.Success
+func (r *Results[SuccessIFace, ErrorIFace]) Outcome() (*SuccessIFace, *ErrorIFace) {
+	if r.IsSuccessful {
+		return r.Success, nil
 	}
 
-	return r.Failure
+	return nil, r.Failure
 }

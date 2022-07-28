@@ -1,24 +1,11 @@
 package results
 
-type Success struct {
-	value interface{}
+type SuccessIFace[T int | string | float32 | interface{}] interface {
+	SetValue(T)
+	GetValue() T
 }
 
-func NewSuccess(value interface{}) *Success {
-	return &Success{value: value}
-}
-
-func (s *Success) GetValue() interface{} {
-	return s.value
-}
-
-type Error struct {
-	Value interface{}
-}
-
-func NewError(value interface{}) *Error {
-	return &Error{Value: value}
-}
-
-func (e *Error) GetValue() interface {
+type ErrorIFace[T int | string | float32 | interface{}] interface {
+	SetValue(T)
+	GetValue() T
 }
