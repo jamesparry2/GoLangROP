@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"railway/pkg/results"
+
+	"github.com/jamesparry2/GoLangROP/pkg/results"
 )
 
 func main() {
