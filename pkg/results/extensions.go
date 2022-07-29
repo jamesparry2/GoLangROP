@@ -1,16 +1,18 @@
 package results
 
+type ResultTeeArgs[S any] func(s *S)
+
 // Map functions take in a result object from the previous chain and will evaluate the track to see if we take the exit path
-func (r *Results[SuccessIFace, ErrorIFace]) Map(inbound func(s *SuccessIFace, f *ErrorIFace, re *Results[SuccessIFace, ErrorIFace]) *Results[SuccessIFace, ErrorIFace]) *Results[SuccessIFace, ErrorIFace] {
+func (r *Results[S, E]) Map(inbound func(s *S) *Results[S, E]) *Results[S, E] {
 	if r.IsSuccess() {
-		return inbound(r.Success, r.Failure, r)
+		return inbound(r.Success)
 	}
 
 	return r.Failed(r.Failure)
 }
 
 // Tee function is for functionality that primairly for side effects.
-func (r *Results[SuccessIFace, ErrorIFace]) Tee(inbound func(s *SuccessIFace)) *Results[SuccessIFace, ErrorIFace] {
+func (r *Results[S, E]) Tee(inbound ResultTeeArgs[S]) *Results[S, E] {
 	if r.IsSuccess() {
 		inbound(r.Success)
 	}
